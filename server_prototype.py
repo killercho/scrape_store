@@ -20,7 +20,6 @@ def handle_connection(conn) -> None:
         data = conn.recv(1024)
         if not data:
             print('Connection terminated')
-            print_lock.release()
             break
 
         # Send the data back to the client
@@ -50,7 +49,6 @@ def main() -> None:
 
     while True:
         conn, address = s.accept()
-        print_lock.acquire()
         print('Connected to address: ', address[0], ':', address[1])
         start_new_thread(handle_connection, (conn,))
 
