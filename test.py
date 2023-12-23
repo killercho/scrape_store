@@ -1,5 +1,5 @@
 '''
-    Test
+    Test for the scraping part of the app
 '''
 # This is a test application testing what sites work with web scraping and what doesn'
 # This confirms that SteamStore works with web scraping so that will be my project
