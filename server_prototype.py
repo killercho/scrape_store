@@ -48,11 +48,20 @@ def main() -> None:
     print('Server is listening for connections...')
 
     while True:
-        conn, address = s.accept()
-        print('Connected to address: ', address[0], ':', address[1])
-        start_new_thread(handle_connection, (conn,))
+        conn = None
+        try:
+            conn, address = s.accept()
+            print('Connected to address: ', address[0], ':', address[1])
+            start_new_thread(handle_connection, (conn,))
+
+        except KeyboardInterrupt:
+            if conn:
+                conn.close()
+            print('\nClosing all connecitons and exiting...')
+            break
 
     s.close()
+
 
 if __name__ == '__main__':
     main()
