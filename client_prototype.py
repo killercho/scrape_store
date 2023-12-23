@@ -13,19 +13,31 @@
 
 import socket, pickle
 
+# Constatns
+TRANSFER_SIZE = 1024
+
 def main() -> None:
     # Server ip
     HOST = '127.0.0.1'
     PORT = 12122
 
+    # Creating the connection
+    # TODO: Handle rejection from the server in the actual app (with a trycatch?)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
+
+    # Create a message for the server
     message = input('Enter a game name: ')
     while True:
+        # Send a message to the server encoded
         s.send(message.encode('ascii'))
-        data = s.recv(1024)
+        # Receive the serve's response
+        data = s.recv(TRANSFER_SIZE)
 
+        # Output the information from the server
         print('Received from the server: ', str(pickle.loads(data)))
+
+        # Enter a new message for the server or exit
         message = input('Enter another game or "no" to exit: ')
         if message == 'no':
             break
