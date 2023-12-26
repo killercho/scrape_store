@@ -19,7 +19,7 @@ TRANSFER_SIZE = 1024
 def main() -> None:
     # Server ip
     HOST = '127.0.0.1'
-    PORT = 12122
+    PORT = 12123
 
     # Creating the connection
     # TODO: Handle rejection from the server in the actual app (with a trycatch?)
