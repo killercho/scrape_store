@@ -27,19 +27,33 @@ def main() -> None:
     s.connect((HOST, PORT))
 
     # Create a message for the server
-    message = input('Enter a game name: ')
+    message: str = input('Enter a game name: ')
     while True:
         # Send a message to the server encoded
         s.send(message.encode('ascii'))
         # Receive the serve's response
-        data = s.recv(TRANSFER_SIZE)
-
-        # Output the information from the server
-        print('Received from the server: ', str(pickle.loads(data)))
+        data: bytes = s.recv(TRANSFER_SIZE)
+        data_arr = pickle.loads(data)
+        if data_arr[0] == 'No game found':
+            print('No game was found. Please check the spelling or search for a new title.\n')
+        elif data_arr[1][0] == "0":
+            print('Title of the game found: ' + data_arr[0] + '.')
+            print('The game found is completely FREE!\n')
+        elif data_arr[1][0] == data_arr[1][1]:
+            print('Title of the game found: ' + data_arr[0] + '.')
+            print('Unfortunatelly the game is not on sale and it\'s price is ' + data_arr[1][0] + '.\n')
+        else:
+            print('Title of the game found: ' + data_arr[0] + '.')
+            print('The game found is on sale from ' + data_arr[1][0] + ' to ' + data_arr[1][1] + '.')
+            # Calculate the procentage of the sale
+            original_price: float = float(data_arr[1][0][:-1].replace(',', '.'))
+            discounted_price: float = float(data_arr[1][1][:-1].replace(',', '.'))
+            sale_procentage: float = int(100 * round(1 - discounted_price / original_price, 2))
+            print('This is a ' + str(sale_procentage) + '% sale!\n')
 
         # Enter a new message for the server or exit
-        message = input('Enter another game or "no" to exit: ')
-        if message == 'no':
+        message = input('Enter another game or "exit" to exit: ')
+        if message == 'exit':
             break
     s.close()
 
