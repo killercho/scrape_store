@@ -36,7 +36,7 @@ def main() -> None:
             data_arr = pickle.loads(data)
 
             # Checking all possible results from the server
-            if data_arr[0] == 'No game found':
+            if data_arr[0] == 'No games found':
                 # If the scraper didn't find a single game
                 print('No game was found. Please check the spelling or search for a new title.\n')
             elif data_arr[1][0] == "0":
