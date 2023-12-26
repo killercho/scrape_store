@@ -1,18 +1,23 @@
 '''
-    Prototype for a server in a server-client application.
-    The server in this version is expected to get input from the client
-    convert it to something that the scraper can use and then return an
-    array of two numbers that corespond to the original and the discounted prices.
-    Example: Red dead redemtion 2 -> red+dead+redemtion+2 -> [29.99, 59.99]
-    The server uses multithreading with a thread for every connection.
+Final form of the server part for the server-client web scraper application.
+In this form after the server establishes connection and receives the information from the client
+the server is expected to run the web scraper and return the appropriate prices for the
+requested game.
+The search is all connected to the steam search. It will return the value for the game
+that is closest to the user search. In the odd case that no such games are found the server
+returns [-1, -1] to indicate that the client made a mistake.
+If the searched game is actually "Free to play" then the server returns [0, 0].
 '''
+
 # Impoting all necessary modules and libraries
 import socket, pickle
+import requests
 from _thread import *
+from bs4 import BeautifulSoup, ResultSet
 
 # Constants
 TRANSFER_SIZE = 1024
-
+URL = 'https://store.steampowered.com/search/?term='
 
 def handle_connection(conn) -> None:
     '''
@@ -28,23 +33,40 @@ def handle_connection(conn) -> None:
 
         # Decode and process the data from the client
         # Web scraping happens here
-        game_name = str(data.decode('ascii'))
-        respond = [0, 0]
-        if game_name == 'Red dead redemtion 2':
-            respond = [29.99, 59.99]
-        elif game_name == 'Songs of conquest':
-            respond = [15.99, 29.99]
-        else:
-            print(game_name)
+        game_name: str = str(data.decode('ascii'))
+        game_request: str = '+'.join(game_name.split()).lower()
+        page: requests.Response = requests.get(URL + game_request)
+        soup: BeautifulSoup = BeautifulSoup(page.text, 'lxml')
+
+        game_names_found: ResultSet = soup.find_all("span", class_="title")
+        response_value: list[str] = ["-1", "-1"]
+        game_name_found: str = "No games found"
+        if len(game_names_found) > 0:
+            game_name_found = game_names_found[0].get_text()
+
+            combined_prices_div = soup.find_all("div", class_="discount_prices")[0]
+            all_divs_arr = combined_prices_div.find_all("div")
+
+            if len(all_divs_arr) == 2:
+                original_value: str= all_divs_arr[0].get_text()
+                discounted_value: str = all_divs_arr[1].get_text()
+                response_value = [original_value, discounted_value]
+            elif len(all_divs_arr) == 1:
+                value = all_divs_arr[0].get_text()
+                if value == "Free":
+                    response_value = ["0", "0"]
+                else:
+                    response_value = [value, value]
+
 
         # Send the data back to the client with pickle to encode it
-        conn.send(pickle.dumps(respond))
+        conn.send(pickle.dumps([game_name_found, response_value]))
     conn.close()
 
 
 def main() -> None:
     HOST = ''
-    PORT = 12122
+    PORT = 12123
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
