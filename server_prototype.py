@@ -32,26 +32,35 @@ def handle_connection(conn) -> None:
             break
 
         # Decode and process the data from the client
-        # Web scraping happens here
         game_name: str = str(data.decode('ascii'))
+
+        # Create the necessary request url and request it
         game_request: str = '+'.join(game_name.split()).lower()
         page: requests.Response = requests.get(URL + game_request)
+
+        # Create a BeautifulSoup object to be searched
         soup: BeautifulSoup = BeautifulSoup(page.text, 'lxml')
 
+        # Search if there were titles found
+        # If there is atleast one title that is the searched title
+        # Else no games were found
         game_names_found: ResultSet = soup.find_all("span", class_="title")
         response_value: list[str] = ["-1", "-1"]
         game_name_found: str = "No games found"
         if len(game_names_found) > 0:
             game_name_found = game_names_found[0].get_text()
 
+            # Grab all divs that correspond to a value of the game
             combined_prices_div = soup.find_all("div", class_="discount_prices")[0]
             all_divs_arr = combined_prices_div.find_all("div")
 
             if len(all_divs_arr) == 2:
+                # If the game has two divs with values then it is discounted
                 original_value: str= all_divs_arr[0].get_text()
                 discounted_value: str = all_divs_arr[1].get_text()
                 response_value = [original_value, discounted_value]
             elif len(all_divs_arr) == 1:
+                # If the game has one div then it is either free or not discounted
                 value = all_divs_arr[0].get_text()
                 if value == "Free":
                     response_value = ["0", "0"]
