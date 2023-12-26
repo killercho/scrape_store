@@ -22,7 +22,6 @@ def main() -> None:
     PORT = 12123
 
     # Creating the connection
-    # TODO: Handle rejection from the server in the actual app (with a trycatch?)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         s.connect((HOST, PORT))
@@ -35,15 +34,21 @@ def main() -> None:
             # Receive the serve's response
             data: bytes = s.recv(TRANSFER_SIZE)
             data_arr = pickle.loads(data)
+
+            # Checking all possible results from the server
             if data_arr[0] == 'No game found':
+                # If the scraper didn't find a single game
                 print('No game was found. Please check the spelling or search for a new title.\n')
             elif data_arr[1][0] == "0":
+                # If the game is free
                 print('Title of the game found: ' + data_arr[0] + '.')
                 print('The game found is completely FREE!\n')
             elif data_arr[1][0] == data_arr[1][1]:
+                # If the game if not discounted
                 print('Title of the game found: ' + data_arr[0] + '.')
                 print('Unfortunatelly the game is not on sale and it\'s price is ' + data_arr[1][0] + '.\n')
             else:
+                # If the game is discounted
                 print('Title of the game found: ' + data_arr[0] + '.')
                 print('The game found is on sale from ' + data_arr[1][0] + ' to ' + data_arr[1][1] + '.')
                 # Calculate the procentage of the sale
@@ -52,7 +57,7 @@ def main() -> None:
                 sale_procentage: float = int(100 * round(1 - discounted_price / original_price, 2))
                 print('This is a ' + str(sale_procentage) + '% sale!\n')
 
-            # Enter a new message for the server or exit
+            # Ask the user for another request or close the connection
             message = input('Enter another game or "exit" to exit: ')
             if message == 'exit':
                 break
