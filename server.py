@@ -10,9 +10,10 @@ If the searched game is actually "Free to play" then the server returns [0, 0].
 '''
 
 # Impoting all necessary modules and libraries
-import socket, pickle
+import socket
+import pickle
+from _thread import start_new_thread
 import requests
-from _thread import *
 from bs4 import BeautifulSoup, ResultSet
 
 # Constants
@@ -36,7 +37,7 @@ def handle_connection(conn) -> None:
 
         # Create the necessary request url and request it
         game_request: str = '+'.join(game_name.split()).lower()
-        page: requests.Response = requests.get(URL + game_request)
+        page: requests.Response = requests.get(URL + game_request, timeout=10)
 
         # Create a BeautifulSoup object to be searched
         soup: BeautifulSoup = BeautifulSoup(page.text, 'lxml')
@@ -74,21 +75,25 @@ def handle_connection(conn) -> None:
 
 
 def main() -> None:
-    HOST = ''
-    PORT = 12123
+    '''
+    The main function that starts when the script is started
+    '''
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((HOST, PORT))
-    print('Server binded to port: ', PORT)
+    host = ''
+    port = 12123
 
-    s.listen()
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind((host, port))
+    print('Server binded to port: ', port)
+
+    sock.listen()
     print('Server is listening for connections...')
 
     while True:
         conn = None
         try:
             # Create a connection when a client requests it on a different thread
-            conn, address = s.accept()
+            conn, address = sock.accept()
             print('Connected to address: ', address[0], ':', address[1])
             start_new_thread(handle_connection, (conn,))
 
@@ -99,7 +104,7 @@ def main() -> None:
             print('\nClosing all connecitons and exiting...')
             break
 
-    s.close()
+    sock.close()
 
 
 if __name__ == '__main__':
