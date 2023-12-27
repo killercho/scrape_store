@@ -11,28 +11,32 @@
     and the procentale of the sale atm.
 '''
 
-import socket, pickle
+import socket
+import pickle
 
 # Constatns
 TRANSFER_SIZE = 1024
 
 def main() -> None:
+    '''
+    Main function that runs when the script is executed.
+    '''
     # Server ip
-    HOST = '127.0.0.1'
-    PORT = 12123
+    host = '127.0.0.1'
+    port = 12123
 
     # Creating the connection
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
-        s.connect((HOST, PORT))
+        sock.connect((host, port))
 
         # Create a message for the server
         message: str = input('Enter a game name: ')
         while True:
             # Send a message to the server encoded
-            s.send(message.encode('ascii'))
+            sock.send(message.encode('ascii'))
             # Receive the serve's response
-            data: bytes = s.recv(TRANSFER_SIZE)
+            data: bytes = sock.recv(TRANSFER_SIZE)
             data_arr = pickle.loads(data)
 
             # Checking all possible results from the server
@@ -46,11 +50,13 @@ def main() -> None:
             elif data_arr[1][0] == data_arr[1][1]:
                 # If the game if not discounted
                 print('Title of the game found: ' + data_arr[0] + '.')
-                print('Unfortunatelly the game is not on sale and it\'s price is ' + data_arr[1][0] + '.\n')
+                print('Unfortunatelly the game is not on sale and it\'s price is ' \
+                      + data_arr[1][0] + '.\n')
             else:
                 # If the game is discounted
                 print('Title of the game found: ' + data_arr[0] + '.')
-                print('The game found is on sale from ' + data_arr[1][0] + ' to ' + data_arr[1][1] + '.')
+                print('The game found is on sale from ' + data_arr[1][0] + ' to ' \
+                      + data_arr[1][1] + '.')
                 # Calculate the procentage of the sale
                 original_price: float = float(data_arr[1][0][:-1].replace(',', '.'))
                 discounted_price: float = float(data_arr[1][1][:-1].replace(',', '.'))
@@ -65,7 +71,7 @@ def main() -> None:
         print('Socket exception occured!')
         print('The error is ' + str(socket.error))
     finally:
-        s.close()
+        sock.close()
 
 if __name__ == '__main__':
     main()
