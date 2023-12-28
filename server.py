@@ -70,10 +70,10 @@ def handle_connection(conn) -> None:
                 else:
                     response_value = [value, value]
 
-
         # Send the data back to the client with pickle to encode it
         conn.send(pickle.dumps([game_name_found, response_value]))
     conn.close()
+
 
 def main() -> None:
     '''

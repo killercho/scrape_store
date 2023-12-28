@@ -43,7 +43,7 @@ def main() -> None:
             # Checking all possible results from the server
             if data_arr[0] == 'No games found':
                 # If the scraper didn't find a single game
-                print('No game was found. Please check the spelling'\
+                print('No game was found. Please check the spelling'
                       'or search for a new title.\n')
             elif data_arr[1][0] == "0":
                 # If the game is free
@@ -52,7 +52,7 @@ def main() -> None:
             elif data_arr[1][0] == data_arr[1][1]:
                 # If the game if not discounted
                 print('Title of the game found: ' + data_arr[0] + '.')
-                print('Unfortunatelly the game is not on sale'\
+                print('Unfortunatelly the game is not on sale'
                       'and it\'s price is '
                       + data_arr[1][0] + '.\n')
             else:
@@ -81,6 +81,7 @@ def main() -> None:
 
     finally:
         sock.close()
+
 
 if __name__ == '__main__':
     main()
