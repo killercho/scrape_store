@@ -1,14 +1,14 @@
 '''
-    Prototype for a client in a server-client application.
-    The client in this version is expected to sent input from the user
-    and print the answer that the server returned from the connection.
-    The server answer is in the form of a price that the web scraper scraped.
-    Example: Red dead redemption 2 -> [29.99, 59.99]
-    where the first value is the reduced price of the game
-    and the second one is the original value of the game.
-    If the prices are the same then appropriate output should be displayed.
-    With the prices there should be info for the amount saved by the user
-    and the procentale of the sale atm.
+Prototype for a client in a server-client application.
+The client in this version is expected to sent input from the user
+and print the answer that the server returned from the connection.
+The server answer is in the form of a price that the web scraper scraped.
+Example: Red dead redemption 2 -> [29.99, 59.99]
+where the first value is the reduced price of the game
+and the second one is the original value of the game.
+If the prices are the same then appropriate output should be displayed.
+With the prices there should be info for the amount saved by the user
+and the procentale of the sale atm.
 '''
 
 import socket
@@ -70,10 +70,10 @@ def main() -> None:
                                                          / original_price, 2))
                 print('This is a ' + str(sale_procentage) + '% sale!\n')
 
-            # Ask the user for another request or close the connection
-            message = input('Enter another game or "exit" to exit: ')
-            if message == 'exit':
-                break
+                # Ask the user for another request or close the connection
+                message = input('Enter another game or "exit" to exit: ')
+                if message == 'exit':
+                    break
 
     except socket.error:
         print('Socket exception occured!')

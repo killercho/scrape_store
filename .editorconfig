@@ -1,21 +1,33 @@
-# top-most EditorConfig file
+# https://editorconfig.org/
+
 root = true
 
-# Unix-style newlines with a newline ending every file
 [*]
-end_of_line = lf
-
-# Matches multiple files with brace expansion notation
-# Set default charset
-[*.{js,py}]
-charset = utf-8
-
-# 4 space indentation
-[*.py]
 indent_style = space
 indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+charset = utf-8
 
-# Tab indentation (no size specified)
+[*.py]
+max_line_length = 79
+ensure_newline_before_comments = true
+include_trailing_comma = true
+use_parentheses = true
+
+# Use 2 spaces for the HTML files
+[*.html]
+indent_size = 2
+
+# The JSON files contain newlines inconsistently
+[*.json]
+indent_size = 2
+insert_final_newline = false
+
+# Makefiles always use tabs for indentation
 [Makefile]
 indent_style = tab
 
+[*.yml]
+indent_size = 2
