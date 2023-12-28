@@ -70,10 +70,10 @@ def main() -> None:
                                                          / original_price, 2))
                 print('This is a ' + str(sale_procentage) + '% sale!\n')
 
-                # Ask the user for another request or close the connection
-                message = input('Enter another game or "exit" to exit: ')
-                if message == 'exit':
-                    break
+            # Ask the user for another request or close the connection
+            message = input('Enter another game or "exit" to exit: ')
+            if message == 'exit':
+                break
 
     except socket.error:
         print('Socket exception occured!')
