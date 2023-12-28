@@ -1,0 +1,15 @@
+name: CI workflow
+on: push
+jobs:
+  flake8-lint:
+    name: Flake8 check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get source
+        uses: actions/checkout@v3
+      - name: Set up python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Flake8 lint check
+        uses: py-actions/flake8@v2
