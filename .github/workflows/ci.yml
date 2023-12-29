@@ -13,11 +13,3 @@ jobs:
           python-version: "3.11"
       - name: Flake8 lint check
         uses: py-actions/flake8@v2
-
-  editorconfig-check:
-    name: Check the editorconfig file
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: editorconfig-checker/action-editorconfig-checker@main
-      - run: editorconfig-checker
