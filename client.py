@@ -44,7 +44,7 @@ def main() -> None:
             if data_arr[0] == 'No games found':
                 # If the scraper didn't find a single game
                 print('No game was found. Please check the spelling'
-                      'or search for a new title.\n')
+                    'or search for a new title.\n')
             elif data_arr[1][0] == "0":
                 # If the game is free
                 print('Title of the game found: ' + data_arr[0] + '.')
@@ -53,14 +53,14 @@ def main() -> None:
                 # If the game if not discounted
                 print('Title of the game found: ' + data_arr[0] + '.')
                 print('Unfortunatelly the game is not on sale'
-                      'and it\'s price is '
-                      + data_arr[1][0] + '.\n')
+                    'and it\'s price is '
+                    + data_arr[1][0] + '.\n')
             else:
                 # If the game is discounted
                 print('Title of the game found: ' + data_arr[0] + '.')
                 print('The game found is on sale from '
-                      + data_arr[1][0] + ' to '
-                      + data_arr[1][1] + '.')
+                    + data_arr[1][0] + ' to '
+                    + data_arr[1][1] + '.')
                 # Calculate the procentage of the sale
                 original_price: float = float(data_arr[1][0][:-1]
                                               .replace(',', '.'))
