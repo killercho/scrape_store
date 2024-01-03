@@ -23,7 +23,7 @@ def main() -> None:
     Main function that runs when the script is executed.
     '''
     # Server ip
-    host = '127.0.0.1'
+    host = '172.19.0.2'
     port = 12123
 
     # Creating the connection
