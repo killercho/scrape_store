@@ -23,7 +23,7 @@ jobs:
 
   build-and-push:
     name: Build and push the docker container
-    needs: [ sonarcloud ]
+    needs: [ sonarcloud, snyk ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,6 +42,18 @@ jobs:
           file: ./server/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/scrape_store_server:latest
+  snyk:
+    needs: [ flake8-lint, makrdown-checker ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+    - name: Run Snyk
+      working-directory: ${{github.workspace}}/src
+      run: |
+        pip install -r requirements.txt
+        npm install -g snyk
+        snyk auth ${{ secrets.SNYK_TOKEN }}
+        snyk test
 
   sonarcloud:
     name: SonarCloud check
