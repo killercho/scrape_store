@@ -13,3 +13,10 @@ jobs:
           python-version: "3.11"
       - name: Flake8 lint check
         uses: py-actions/flake8@v2
+
+  makrdown-checker:
+    name: Markdown check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npx markdown-cli *.md
