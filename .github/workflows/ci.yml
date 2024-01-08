@@ -51,13 +51,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/python@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
+        uses: actions/checkout@v3
+      - name: Run Snyk
+        working-directory: ${{github.workspace}}
+        run: |
+          pip install -r server/requirements.txt
+          npm install -g snyk
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk test --all-projects --detection-depth=3
 
   sonarcloud:
     name: SonarCloud check
