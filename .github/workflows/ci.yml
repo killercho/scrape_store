@@ -23,6 +23,24 @@ jobs:
       - name: Run the Check
         run: npx markdown-cli *.md
 
+  test-docker-image:
+    name: Test the Docker Image with Trivy
+    needs: [ flake8-lint, makrdown-checker ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build Docker Image
+        run: docker build -t "server-test" ./server
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'server-test'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
   build-and-push:
     name: Build and Push the Docker Container
     needs: [ sonarcloud, snyk ]
@@ -47,7 +65,7 @@ jobs:
 
   snyk:
     name: Snyk check
-    needs: [ flake8-lint, makrdown-checker ]
+    needs: [ test-docker-image ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -62,7 +80,7 @@ jobs:
 
   sonarcloud:
     name: SonarCloud check
-    needs: [ flake8-lint, makrdown-checker ]
+    needs: [ test-docker-image ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
