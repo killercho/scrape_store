@@ -2,10 +2,10 @@ name: CI workflow
 on: push
 jobs:
   flake8-lint:
-    name: Flake8 check
+    name: Flake8 Check
     runs-on: ubuntu-latest
     steps:
-      - name: Get source
+      - name: Checkout
         uses: actions/checkout@v3
       - name: Set up python environment
         uses: actions/setup-python@v4
@@ -15,14 +15,16 @@ jobs:
         uses: py-actions/flake8@v2
 
   makrdown-checker:
-    name: Markdown check
+    name: Markdown Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - run: npx markdown-cli *.md
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run the Check
+        run: npx markdown-cli *.md
 
   build-and-push:
-    name: Build and push the docker container
+    name: Build and Push the Docker Container
     needs: [ sonarcloud, snyk ]
     runs-on: ubuntu-latest
     steps:
@@ -48,21 +50,23 @@ jobs:
     needs: [ flake8-lint, makrdown-checker ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-    - name: Run Snyk
-      working-directory: ${{github.workspace}}/src
-      run: |
-        pip install -r requirements.txt
-        npm install -g snyk
-        snyk auth ${{ secrets.SNYK_TOKEN }}
-        snyk test
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Snyk
+        working-directory: ${{github.workspace}}/src
+        run: |
+          pip install -r requirements.txt
+          npm install -g snyk
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk test
 
   sonarcloud:
     name: SonarCloud check
     needs: [ flake8-lint, makrdown-checker ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
