@@ -53,9 +53,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Run Snyk
-        working-directory: ${{github.workspace}}/src
+        working-directory: ${{github.workspace}}
         run: |
-          pip install -r requirements.txt
+          pip install -r server/requirements.txt
           npm install -g snyk
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test
