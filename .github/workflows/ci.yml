@@ -42,6 +42,7 @@ jobs:
           file: ./server/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/scrape_store_server:latest
+
   snyk:
     name: Snyk check
     needs: [ flake8-lint, makrdown-checker ]
