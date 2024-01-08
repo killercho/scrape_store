@@ -59,6 +59,7 @@ jobs:
           npm install -g snyk
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --all-projects --detection-depth=3
+          snyk fix --all-projects
 
   sonarcloud:
     name: SonarCloud check
