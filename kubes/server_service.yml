@@ -9,3 +9,4 @@ spec:
   ports:
     - protocol: TCP
       port: 12123
+      targetPort: 12123
