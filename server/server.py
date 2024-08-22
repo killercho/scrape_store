@@ -13,6 +13,7 @@ If the searched game is actually "Free to play" then the server returns [0, 0].
 # Impoting all necessary modules and libraries
 import socket
 import pickle
+import os
 from _thread import start_new_thread
 import requests
 from bs4 import BeautifulSoup, ResultSet
@@ -80,8 +81,8 @@ def main() -> None:
     The main function that starts when the script is started
     '''
 
-    host = ''
-    port = 12123
+    host = '0.0.0.0'
+    port = int(os.getenv('LISTEN_PORT')) # 12123
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind((host, port))

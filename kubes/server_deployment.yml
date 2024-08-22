@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+        - name: server
+          image: killercho/scrape_store_server:latest
+          ports:
+            - containerPort: 12123
+          env:
+          - name: PYTHONUNBUFFERED
+            value: "1"
+          - name: LISTEN_PORT
+            value: "12123"
