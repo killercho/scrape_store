@@ -23,9 +23,38 @@ jobs:
       - name: Run the Check
         run: npx markdown-cli *.md
 
+  snyk:
+    name: Snyk check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Snyk
+        working-directory: ${{github.workspace}}
+        run: |
+          pip install -r server/requirements.txt
+          npm install -g snyk
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk test --all-projects --detection-depth=3
+
+  sonarcloud:
+    name: SonarCloud check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   test-docker-image:
     name: Test the Docker Image with Trivy
-    needs: [ flake8-lint, makrdown-checker ]
+    needs: [ flake8-lint, makrdown-checker, snyk, sonarcloud ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -43,7 +72,7 @@ jobs:
 
   build-and-push:
     name: Build and Push the Docker Container
-    needs: [ sonarcloud, snyk ]
+    needs: [ test-docker-image ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -62,34 +91,3 @@ jobs:
           file: ./server/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/scrape_store_server:latest
-
-  snyk:
-    name: Snyk check
-    needs: [ test-docker-image ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Run Snyk
-        working-directory: ${{github.workspace}}
-        run: |
-          pip install -r server/requirements.txt
-          npm install -g snyk
-          snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --all-projects --detection-depth=3
-
-  sonarcloud:
-    name: SonarCloud check
-    needs: [ test-docker-image ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
