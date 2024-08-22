@@ -32,7 +32,7 @@ jobs:
   kubes-deployment:
     name: Deploy and test the app
     runs-on: ubuntu-latest
-    needs: [ build-push-action ]
+    needs: [ build-and-push ]
     steps:
       - name: Setup minikube
         uses: medyagh/setup-minikube@master
