@@ -13,6 +13,7 @@ and the procentale of the sale atm.
 
 import socket
 import pickle
+import sys
 
 # Constatns
 TRANSFER_SIZE = 1024
@@ -24,8 +25,8 @@ def main() -> None:
     """
     # Server ip
 
-    host = "192.168.49.2"
-    port = 31594
+    host = str(sys.argv[1])
+    port = int(sys.argv[2])
 
     # Creating the connection
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
