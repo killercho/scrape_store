@@ -82,7 +82,7 @@ def main() -> None:
     '''
 
     host = '0.0.0.0'
-    port = int(os.getenv('LISTEN_PORT')) # 12123
+    port = int(os.getenv('LISTEN_PORT'))  # 12123
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind((host, port))

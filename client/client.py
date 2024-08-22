@@ -82,7 +82,7 @@ def main() -> None:
                 )
                 print("This is a " + str(sale_procentage) + "% sale!\n")
 
-              # Ask the user for another request or close the connection
+            # Ask the user for another request or close the connection
             message = input('Enter another game or "exit" to exit: ')
             if message == "exit":
                 break
