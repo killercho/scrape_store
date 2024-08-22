@@ -71,8 +71,12 @@ def main() -> None:
                     + "."
                 )
                 # Calculate the procentage of the sale
-                original_price: float = float(data_arr[1][0][:-1].replace(",", "."))
-                discounted_price: float = float(data_arr[1][1][:-1].replace(",", "."))
+                original_price: float = float(
+                    data_arr[1][0][:-1].replace(",", ".")
+                )
+                discounted_price: float = float(
+                    data_arr[1][1][:-1].replace(",", ".")
+                )
                 sale_procentage: float = int(
                     100 * round(1 - discounted_price / original_price, 2)
                 )
