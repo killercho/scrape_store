@@ -20,9 +20,11 @@ The "Steam sale store scraper" (`Ssss` like a snake) is a client-server multi-th
 ## Plan and structure
 
 ### Git branching strategy
-To protect from exploits and to always have a working latest version of the app I decided to use a *Feature branch* strategy. This branching strategy emphasizes on the use of one **master** branch and one or more **feature** branch, enforced with a github rule forbiding the unauthorized push and force push to the **master** branch. The only way to push to the **master** branch is by a *Pull request* that is accepted by another contributor after checking the code.
-The **master** branch holds the latest stable version of the application, whereas the **feature** branch is used for developing new features and fixing existing issues. Once the code in the *feature* branch is completed it is merged with the **master** branch
-thus becoming the next stable version. Then the additional branch is deleted and the cycle continues.
+To protect from exploits and to always have a working latest version of the app I decided to use a *Feature branch* strategy.
+This branching strategy emphasizes on the use of one **master** branch and one or more **feature** branch, enforced with a GitHub rule forbidding the unauthorized push and force push to the **master** branch.
+The only way to push to the **master** branch is by a *Pull request* that is accepted by another contributor after checking the code.
+The **master** branch holds the latest stable version of the application, whereas the **feature** branch is used for developing new features and fixing existing issues.
+Once the code in the *feature* branch is completed it is merged with the **master** branch thus becoming the next stable version. Then the additional branch is deleted and the cycle continues.
 Feature branches do not need to be named in a specific way, but it is **preferred** that they use *feature/* or *bug/* as a prefix, followed by a descriptive name of the new code implemented.
 
 ### Continuous integration
@@ -47,9 +49,15 @@ The hole project is composed of:
  - *README.md file - the documentation that you are reading right now.
 
 ## Implementation details
-As it was said above the application is made in Python3, using libraries that come with the language and some that need to be downloaded additionally. The libraries that come with the language are **socket**, **pickle** and the library used for working with threads. These are mainly used to handle the connection between the client and the server. Where the server creates a thread for each connection and uses sockets to send and receive information from the client.
-	The libraries that need to be installed from the `requirements.txt` file are **requests**, **beautifulsoup4** and **lxml**. Each of these is used to handle the web scraping part of the application. Using the *requests* library we get the page from the chosen url of a site. Then a *BeautifulSoup* object is created with that page's text parsed into *lxml*. After this the required information for a game is scraped and send back to the client to be displayed.
-	In this case the information that the client requests is the price of a game. The application goes to the *Steam* store page and gets the first entry in a list of the search results. The *Steam* store's first entry in the result list is the closest title to the one the client asked for.
+As it was said above the application is made in Python3, using libraries that come with the language and some that need to be downloaded additionally.
+The libraries that come with the language are **socket**, **pickle** and the library used for working with threads. These are mainly used to handle the connection between the client and the server.
+Where the server creates a thread for each connection and uses sockets to send and receive information from the client.
+The libraries that need to be installed from the `requirements.txt` file are **requests**, **beautifulsoup4** and **lxml**. Each of these is used to handle the web scraping part of the application.
+Using the *requests* library we get the page from the chosen url of a site.
+Then a *BeautifulSoup* object is created with that page's text parsed into *lxml*.
+After this the required information for a game is scraped and send back to the client to be displayed.
+In this case the information that the client requests is the price of a game. The application goes to the *Steam* store page and gets the first entry in a list of the search results.
+The *Steam* store's first entry in the result list is the closest title to the one the client asked for.
 
 ## Installation
 To start using the app you only need to install the required libraries from the `requirements.txt` file and have `python3`.
