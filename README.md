@@ -34,7 +34,7 @@ Feature branches do not need to be named in a specific way, but it is **preferre
 Whenever pushing to any branch, the *CI* workflow is executed. This workflow consists of:
  - Flake8			- used to check if the new python code is consistent with the agreed upon styles;
  - Markdown-checker - used to lint, syntax validate and detect errors in the new documentation, pushed in the project in the form of a markdown file;
- - Snyk				- used to identify and warn about existing vulnerabilities in the new code, and if such are found, provide a working solution;
+ - Snyk				- used to identify and warn about existing vulnerabilities in the new code and dependencies, and if such are found, provide a working solution;
  - SonarCloud		- used to analyze the existing code and provide additional quality assurance;
  - Trivy			- after all the other actions finish successfully, then Trivy is used to scan the result server docker image for any vulnerabilities and other issues.
 
