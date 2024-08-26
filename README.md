@@ -51,7 +51,7 @@ The hole project is composed of:
  - *client* folder - holding the python code responsible for running the client;
  - *server* folder - holding the docker image file, python code for the server application and the requirements for executing the app;
  - *kubes* folder  - holding the information for the Kubernetes deployment;
- - *README.md file - the documentation that you are reading right now.
+ - *README.md* file - the documentation that you are reading right now.
 
 ## Implementation details
 As it was said above the application is made in Python3, using libraries that come with the language and some that need to be downloaded additionally.
